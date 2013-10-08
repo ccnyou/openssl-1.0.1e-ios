@@ -9,4 +9,4 @@ The two images included in this collection show you how to configure an Xcode pr
 
 The additional files provided in the set are used to update the standard OpenSSL 1.0.1e distribution and build the fat libcrypto.a and libssl.a. Place them in the same directory as OpenSSL source files (specifically, next to the top level Makefile), and then run `./build-all-for-ios.sh`. If you don't care about building libcrypto.a and libssl.a yourself, then ignore the additional files.
 
-Note: these prebuilt libraries are not FIPS Capable. If you need the FIPS Capable library, then you will have to build them yourself following the OpenSSL FIPS User Guide or contact the OpenSSL Foundation for assistance. You can find the OpenSSL FIPS User Guide at http://openssl.org/docs/fips/UserGuide-2.0.pdf‎.
+Note: these prebuilt libraries are not FIPS Capable. If you need the FIPS Capable library, then you will have to build them yourself following the OpenSSL FIPS User Guide or contact the OpenSSL Foundation for assistance. You can find the OpenSSL FIPS User Guide at http://openssl.org/docs/fips/UserGuide-2.0.pdf.
