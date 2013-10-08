@@ -28,7 +28,7 @@ echo "****************************************"
 THIS_ARCH=i386
 . ./setenv-ios-$THIS_ARCH.sh
 make clean && make dclean
-./config -no-sslv2 -no-sslv3 -no-hw -no-engine --openssldir=$IOS_INSTALLDIR
+./config -no-ssl2 -no-ssl3 -no-hw -no-engine --openssldir=$IOS_INSTALLDIR
 make depend
 make all
 mkdir $THIS_ARCH
@@ -41,7 +41,7 @@ echo "****************************************"
 THIS_ARCH=armv7
 . ./setenv-ios-$THIS_ARCH.sh
 make clean && make dclean
-./config -no-sslv2 -no-sslv3 -no-hw -no-engine --openssldir=$IOS_INSTALLDIR
+./config -no-ssl2 -no-ssl3 -no-hw -no-engine --openssldir=$IOS_INSTALLDIR
 make depend
 make all
 mkdir $THIS_ARCH
@@ -54,7 +54,7 @@ echo "****************************************"
 THIS_ARCH=armv7s
 . ./setenv-ios-$THIS_ARCH.sh
 make clean && make dclean
-./config -no-sslv2 -no-sslv3 -no-hw -no-engine --openssldir=$IOS_INSTALLDIR
+./config -no-ssl2 -no-ssl3 -no-hw -no-engine --openssldir=$IOS_INSTALLDIR
 make depend
 make all
 mkdir $THIS_ARCH
@@ -67,7 +67,7 @@ echo "****************************************"
 THIS_ARCH=arm64
 . ./setenv-ios-$THIS_ARCH.sh
 make clean && make dclean
-./config -no-sslv2 -no-sslv3 -no-hw -no-engine --openssldir=$IOS_INSTALLDIR
+./config -no-ssl2 -no-ssl3 -no-hw -no-engine --openssldir=$IOS_INSTALLDIR
 make depend
 make all
 mkdir $THIS_ARCH
