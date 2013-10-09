@@ -18,6 +18,12 @@ fi
 
 #################################
 
+if [ ! -z "$DEVELOPER_DIR" ]; then
+  echo "WARNING: DEVELOPER_DIR is not empty (and its not honored)."
+fi
+
+#################################
+
 CROSS_ARCH="-armv7"
 CROSS_TYPE="iPhoneOS"
 
@@ -54,7 +60,7 @@ fi
 # CROSS_SDK is the SDK version being used - adjust as appropriate
 for i in 7.1 7.0 6.1 6.0 5.1 5.0 4.3 do
 do
-  if [ -d "$CROSS_DEVELOPER/Platforms/$CROSS_TYPE.platform//Developer/SDKs/$CROSS_TYPE$i.sdk" ]; then
+  if [ -d "$CROSS_DEVELOPER/Platforms/$CROSS_TYPE.platform/Developer/SDKs/$CROSS_TYPE$i.sdk" ]; then
     SDKVER=$i
     break
   fi
@@ -79,14 +85,6 @@ fi
 
 #################################
 
-#
-# fips/sha/Makefile uses HOSTCC for building fips_standalone_sha1
-#
-export HOSTCC=/usr/bin/cc
-export HOSTCFLAGS="-arch i686"
-
-#################################
-
 # CROSS_COMPILE is the prefix for the tools - in this case the scripts
 # which invoke the tools with the correct options for 'fat' binary handling
 export CROSS_COMPILE="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/"
@@ -102,7 +100,6 @@ fi
 #
 
 export IOS_TARGET=darwin-iphoneos-cross
-export IOS_INSTALLDIR=/usr/local/ssl/ios
 
 #################################
 

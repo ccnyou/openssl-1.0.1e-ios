@@ -23,18 +23,18 @@ sed -i "" 's/MAKEDEPPROG=makedepend/MAKEDEPPROG=$(CC) -M/g' Makefile.org
 
 export LANG=$OLD_LANG
 export CC=clang
-export IOS_INSTALLDIR="/usr/local/ssl/ios"
+export IOS_INSTALLDIR="/usr/local/ssl/ios-6"
 unset OPENSSLDIR
 
 ################################################################
 # Second, build i386
 echo "****************************************"
 THIS_ARCH=i386
+unset CROSS_ARCH
+
 . ./setenv-ios-$THIS_ARCH.sh
 ./config -no-ssl2 -no-ssl3 -no-asm -no-shared -no-hw -no-engine --openssldir=$IOS_INSTALLDIR
-make clean && make dclean
-make depend
-make all
+make clean 2>&1>/dev/null && make all
 mkdir $THIS_ARCH
 \cp ./libcrypto.a $THIS_ARCH/libcrypto.a
 \cp ./libssl.a $THIS_ARCH/libssl.a
@@ -43,11 +43,11 @@ mkdir $THIS_ARCH
 # Third, build ARMv7
 echo "****************************************"
 THIS_ARCH=armv7
+unset CROSS_ARCH
+
 . ./setenv-ios-$THIS_ARCH.sh
 ./config -no-ssl2 -no-ssl3 -no-asm -no-shared -no-hw -no-engine --openssldir=$IOS_INSTALLDIR
-make clean && make dclean
-make depend
-make all
+make clean 2>&1>/dev/null && make all
 mkdir $THIS_ARCH
 \cp ./libcrypto.a $THIS_ARCH/libcrypto.a
 \cp ./libssl.a $THIS_ARCH/libssl.a
@@ -56,24 +56,24 @@ mkdir $THIS_ARCH
 # Fourth, build ARMv7s
 echo "****************************************"
 THIS_ARCH=armv7s
+unset CROSS_ARCH
+
 . ./setenv-ios-$THIS_ARCH.sh
 ./config -no-ssl2 -no-ssl3 -no-asm -no-shared -no-hw -no-engine --openssldir=$IOS_INSTALLDIR
-make clean && make dclean
-make depend
-make all
+make clean 2>&1>/dev/null && make all
 mkdir $THIS_ARCH
 \cp ./libcrypto.a $THIS_ARCH/libcrypto.a
 \cp ./libssl.a $THIS_ARCH/libssl.a
 
 ################################################################
 # Fifth, build ARM64
-echo "****************************************"
+#echo "****************************************"
 THIS_ARCH=arm64
+unset CROSS_ARCH
+
 . ./setenv-ios-$THIS_ARCH.sh
 ./config -no-ssl2 -no-ssl3 -no-asm -no-shared -no-hw -no-engine --openssldir=$IOS_INSTALLDIR
-make clean && make dclean
-make depend
-make all
+make clean 2>&1>/dev/null && make all
 mkdir $THIS_ARCH
 \cp ./libcrypto.a $THIS_ARCH/libcrypto.a
 \cp ./libssl.a $THIS_ARCH/libssl.a
@@ -93,12 +93,15 @@ xcrun -sdk iphoneos lipo -info libssl.a
 ################################################################
 # Eight, install the library
 echo "****************************************"
+
+read -p "Press [ENTER] to install the library or [CTRL]+C to exit"
+
 sudo -E make install
 
 ################################################################
 # Ninth, cleanup the install
 echo "****************************************"
-sudo rm -rf "$IOS_INSTALLDIR/openssl.conf"
+sudo rm -rf "$IOS_INSTALLDIR/openssl.cnf"
 sudo rm -rf "$IOS_INSTALLDIR/bin"
 sudo rm -rf "$IOS_INSTALLDIR/certs"
 sudo rm -rf "$IOS_INSTALLDIR/man"
@@ -107,7 +110,17 @@ sudo rm -rf "$IOS_INSTALLDIR/private"
 
 ################################################################
 # Tenth, build the tarball
-# mkdir openssl-ios
-# cp -R "$IOS_INSTALLDIR" openssl-ios/
-# tar czf openssl-1.0.1e-ios-7.0.tar.gz openssl-ios/
-# rm -rf openssl-ios/
+mkdir openssl-ios
+cp -R "$IOS_INSTALLDIR/include" openssl-ios/
+cp -R "$IOS_INSTALLDIR/lib" openssl-ios/
+tar czf openssl-1.0.1e-ios-6.1.tar.gz openssl-ios/
+
+################################################################
+# Eleventh, cleanup
+make clean 2>&1>/dev/null && make dclean 2>&1>/dev/null
+
+\rm -rf openssl-ios/
+\rm -rf i386/
+\rm -rf armv7/
+\rm -rf armv7s/
+\rm -rf arm64/
