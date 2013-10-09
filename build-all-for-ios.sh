@@ -111,6 +111,8 @@ sudo rm -rf "$IOS_INSTALLDIR/certs"
 sudo rm -rf "$IOS_INSTALLDIR/man"
 sudo rm -rf "$IOS_INSTALLDIR/misc"
 sudo rm -rf "$IOS_INSTALLDIR/private"
+sudo rm -rf "$IOS_INSTALLDIR/lib/pkgconfig"
+sudo rm -rf "$IOS_INSTALLDIR/lib/engines"
 
 ################################################################
 # Tenth, build the tarball
