@@ -23,8 +23,14 @@ sed -i "" 's/MAKEDEPPROG=makedepend/MAKEDEPPROG=$(CC) -M/g' Makefile.org
 
 export LANG=$OLD_LANG
 export CC=clang
-export IOS_INSTALLDIR="/usr/local/ssl/ios-6"
+export IOS_INSTALLDIR="/usr/local/ssl/ios"
 unset OPENSSLDIR
+
+rm -rf openssl-ios/
+rm -rf i386/
+rm -rf armv7/
+rm -rf armv7s/
+rm -rf arm64/
 
 ################################################################
 # Second, build i386
@@ -93,9 +99,7 @@ xcrun -sdk iphoneos lipo -info libssl.a
 ################################################################
 # Eight, install the library
 echo "****************************************"
-
 read -p "Press [ENTER] to install the library or [CTRL]+C to exit"
-
 sudo -E make install
 
 ################################################################
@@ -113,14 +117,15 @@ sudo rm -rf "$IOS_INSTALLDIR/private"
 mkdir openssl-ios
 cp -R "$IOS_INSTALLDIR/include" openssl-ios/
 cp -R "$IOS_INSTALLDIR/lib" openssl-ios/
-tar czf openssl-1.0.1e-ios-6.1.tar.gz openssl-ios/
+tar czf openssl-1.0.1e-ios-7.0.tar.gz openssl-ios/
 
 ################################################################
 # Eleventh, cleanup
+rm -rf openssl-ios/
+rm -rf i386/
+rm -rf armv7/
+rm -rf armv7s/
+rm -rf arm64/
+
 make clean 2>&1>/dev/null && make dclean 2>&1>/dev/null
 
-\rm -rf openssl-ios/
-\rm -rf i386/
-\rm -rf armv7/
-\rm -rf armv7s/
-\rm -rf arm64/
