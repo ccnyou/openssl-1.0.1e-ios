@@ -1,11 +1,13 @@
 #!/bin/bash
 
+################################################################
+#  Copyright OpenSSL 2013
+#  Contents licensed under the terms of the OpenSSL license
+#  See http://www.openssl.org/source/license.html for details
+################################################################
+
 #
-# setenv-ios-11-armv7s.sh
-#
-# depending on whether or not we are using the simulator or the real
-# device we have slightly different paths which are determined entirely
-# by the CROSS_TYPE setting - either Simulator or OS
+# setenv-ios-11-armv7.sh
 #
 
 #################################

@@ -1,13 +1,17 @@
 #! /bin/sh
 
-# Place setenv.ios.sh and build-all-for-ios.sh next to the makefile.
+################################################################
+#  Copyright OpenSSL 2013
+#  Contents licensed under the terms of the OpenSSL license
+#  See http://www.openssl.org/source/license.html for details
+################################################################
+
+# Place setenv.ios-<arch>.sh and build-all-for-ios.sh next to the makefile.
 # Run ./build-all-for-ios.sh
 
 ################################################################
 # First, fix things
 echo "****************************************"
-
-make clean && make dclean
 
 OLD_LANG=$LANG
 unset LANG
@@ -27,8 +31,8 @@ unset OPENSSLDIR
 echo "****************************************"
 THIS_ARCH=i386
 . ./setenv-ios-$THIS_ARCH.sh
+./config -no-ssl2 -no-ssl3 -no-asm -no-shared -no-hw -no-engine --openssldir=$IOS_INSTALLDIR
 make clean && make dclean
-./config -no-ssl2 -no-ssl3 -no-hw -no-engine --openssldir=$IOS_INSTALLDIR
 make depend
 make all
 mkdir $THIS_ARCH
@@ -40,8 +44,8 @@ mkdir $THIS_ARCH
 echo "****************************************"
 THIS_ARCH=armv7
 . ./setenv-ios-$THIS_ARCH.sh
+./config -no-ssl2 -no-ssl3 -no-asm -no-shared -no-hw -no-engine --openssldir=$IOS_INSTALLDIR
 make clean && make dclean
-./config -no-ssl2 -no-ssl3 -no-hw -no-engine --openssldir=$IOS_INSTALLDIR
 make depend
 make all
 mkdir $THIS_ARCH
@@ -53,8 +57,8 @@ mkdir $THIS_ARCH
 echo "****************************************"
 THIS_ARCH=armv7s
 . ./setenv-ios-$THIS_ARCH.sh
+./config -no-ssl2 -no-ssl3 -no-asm -no-shared -no-hw -no-engine --openssldir=$IOS_INSTALLDIR
 make clean && make dclean
-./config -no-ssl2 -no-ssl3 -no-hw -no-engine --openssldir=$IOS_INSTALLDIR
 make depend
 make all
 mkdir $THIS_ARCH
@@ -66,8 +70,8 @@ mkdir $THIS_ARCH
 echo "****************************************"
 THIS_ARCH=arm64
 . ./setenv-ios-$THIS_ARCH.sh
+./config -no-ssl2 -no-ssl3 -no-asm -no-shared -no-hw -no-engine --openssldir=$IOS_INSTALLDIR
 make clean && make dclean
-./config -no-ssl2 -no-ssl3 -no-hw -no-engine --openssldir=$IOS_INSTALLDIR
 make depend
 make all
 mkdir $THIS_ARCH
@@ -81,12 +85,29 @@ lipo -create armv7/libcrypto.a armv7s/libcrypto.a arm64/libcrypto.a i386/libcryp
 lipo -create armv7/libssl.a armv7s/libssl.a arm64/libssl.a i386/libssl.a -output ./libssl.a
 
 ################################################################
-# Sixth, verify the three architectures are present
+# Seventh, verify the three architectures are present
 echo "****************************************"
 xcrun -sdk iphoneos lipo -info libcrypto.a
 xcrun -sdk iphoneos lipo -info libssl.a
 
 ################################################################
-# Seventh, install the library
+# Eight, install the library
 echo "****************************************"
 sudo -E make install
+
+################################################################
+# Ninth, cleanup the install
+echo "****************************************"
+sudo rm -rf "$IOS_INSTALLDIR/openssl.conf"
+sudo rm -rf "$IOS_INSTALLDIR/bin"
+sudo rm -rf "$IOS_INSTALLDIR/certs"
+sudo rm -rf "$IOS_INSTALLDIR/man"
+sudo rm -rf "$IOS_INSTALLDIR/misc"
+sudo rm -rf "$IOS_INSTALLDIR/private"
+
+################################################################
+# Tenth, build the tarball
+# mkdir openssl-ios
+# cp -R "$IOS_INSTALLDIR" openssl-ios/
+# tar czf openssl-1.0.1e-ios-7.0.tar.gz openssl-ios/
+# rm -rf openssl-ios/
